@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIGITAL BABY</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.167.1/examples/js/loaders/GLTFLoader.js"></script>
     <style>
         body {
             margin: 0;
@@ -24,26 +26,15 @@
         }
         h1 {
             font-size: 5em;
-            image-rendering: pixelated; /* для пиксельного вида */
             color: #000;
             text-transform: uppercase;
             letter-spacing: 10px;
+            image-rendering: pixelated;
         }
-        .baby-container {
+        #baby-3d {
             flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .baby {
-            width: 400px;
-            height: 400px;
-            background: url('https://thumbs.dreamstime.com/b/charming-collection-cute-pixel-art-baby-characters-set-features-both-baby-boys-girls-various-poses-expressing-394515629.jpg') center/cover no-repeat; /* замени на свой, если загрузишь */
-            animation: spin 20s linear infinite;
-        }
-        @keyframes spin {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
+            width: 100%;
+            max-width: 600px;
         }
         footer {
             padding-bottom: 80px;
@@ -51,19 +42,17 @@
         }
         .soon-btn {
             display: inline-block;
-            padding: 20px 60px;
-            background: #000;
-            color: #fff;
+            padding: 15px 50px;
+            background: #fff;
+            color: #000;
             font-size: 3em;
             text-decoration: none;
-            border: 8px solid #000;
-            box-shadow: 10px 10px 0 #000;
-            image-rendering: pixelated;
-            transition: transform 0.1s;
+            border: 4px solid #000;
+            transition: background 0.3s, color 0.3s;
         }
         .soon-btn:hover {
-            transform: translate(-5px, -5px);
-            box-shadow: 15px 15px 0 #000;
+            background: #000;
+            color: #fff;
         }
     </style>
 </head>
@@ -72,12 +61,55 @@
         <h1>digital baby</h1>
     </header>
     
-    <div class="baby-container">
-        <div class="baby"></div> <!-- Здесь крутится бэби, пока фоновая картинка + анимация -->
-    </div>
+    <div id="baby-3d"></div>
     
     <footer>
         <a href="https://t.me/smokywine" target="_blank" class="soon-btn">SOON</a>
     </footer>
+
+    <script>
+        const container = document.getElementById('baby-3d');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(5, 5, 5);
+        scene.add(light);
+        const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambient);
+
+        const loader = new THREE.GLTFLoader();
+        // Бесплатная voxel baby модель (милый пупс в памперсе стиль, замени если найдёшь свою)
+        loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb', (gltf) => {
+            const model = gltf.scene;
+            model.scale.set(2, 2, 2);
+            scene.add(model);
+        }, undefined, () => {
+            // fallback: простой куб как voxel бэби, если модель не загрузится
+            const geometry = new THREE.BoxGeometry(1, 1.5, 1);
+            const material = new THREE.MeshBasicMaterial({ color: 0xffd700, wireframe: true });
+            const baby = new THREE.Mesh(geometry, material);
+            scene.add(baby);
+        });
+
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            scene.rotation.y += 0.005; // медленно крутится
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+    </script>
 </body>
 </html>
