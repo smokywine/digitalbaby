@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIGITAL BABY</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAZSURBVHjaYvz48Q8DEwPDfwYGMDAwAAA3mw9ctBnFAAAAAElFTkSuQmCC'), auto;
+        }
+        .crt {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, transparent 1px, transparent 2px, rgba(0,0,0,0.05) 3px);
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+        @keyframes flicker {
+            0% { opacity: 0.98; }
+            100% { opacity: 1; }
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 4em;
+            text-shadow: 0 0 20px #0ff;
+            animation: glitch 2s infinite;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 0 0 20px #0ff; }
+            5% { text-shadow: 2px 2px #f0f, -2px -2px #0ff; }
+            10% { text-shadow: none; }
+            100% { text-shadow: 0 0 20px #0ff; }
+        }
+        .gif {
+            margin: 30px 0;
+            max-width: 100%;
+        }
+        .links a {
+            color: #0ff;
+            font-size: 1.5em;
+            margin: 0 20px;
+            text-decoration: underline dotted;
+        }
+        .guestbook {
+            margin-top: 60px;
+            padding: 20px;
+            background: #111;
+            border: 2px dashed #0f0;
+        }
+        marquee {
+            font-size: 1.3em;
+            color: #ff0;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="crt"></div>
+    
+    <div class="container">
+        <h1>DIGITAL BABY</h1>
+        <p>internet child 199?–2025 🍼💾</p>
+        
+        <img src="https://i.imgur.com/3QZ9j.gif" alt="dancing baby" class="gif"> <!-- классический dancing baby -->
+        <img src="https://i.imgur.com/OqQXn.gif" alt="hamster dance" class="gif">
+        
+        <marquee>★★★ WELCOME TO MY HOMEPAGE ★★★ UNDER CONSTRUCTION ★★★ BEST VIEWED IN NETSCAPE 4.0 ★★★</marquee>
+        
+        <div class="links">
+            <a href="https://soundcloud.com/твой-ник" target="_blank">🎧 listen on soundcloud</a><br><br>
+            <a href="https://bandcamp.com/твой-альбом" target="_blank">💿 bandcamp</a><br><br>
+            <a href="https://spotify.link/твой-альбом" target="_blank">🟢 spotify</a>
+        </div>
+        
+        <div class="guestbook">
+            <p>✏️ sign my guestbook ✏️</p>
+            <a href="https://forms.gle/сделай-свою-форму" target="_blank">click here to leave a message like in 2005</a>
+        </div>
+        
+        <p style="margin-top: 100px; font-size: 0.8em; color: #555;">
+            made with tears of dial-up modem &lt;3
+        </p>
+    </div>
+</body>
+</html>
