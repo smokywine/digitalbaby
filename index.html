@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIGITAL BABY</title>
     <script src="https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.167.1/examples/js/loaders/GLTFLoader.js"></script>
     <style>
         body {
             margin: 0;
@@ -72,7 +71,8 @@
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xffffff);
         const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: false }); // pixelated look
+        renderer.setPixelRatio(1); // for voxel feel
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
 
@@ -82,25 +82,65 @@
         const ambient = new THREE.AmbientLight(0xffffff, 0.5);
         scene.add(ambient);
 
-        const loader = new THREE.GLTFLoader();
-        // Бесплатная voxel baby модель (милый пупс в памперсе стиль, замени если найдёшь свою)
-        loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb', (gltf) => {
-            const model = gltf.scene;
-            model.scale.set(2, 2, 2);
-            scene.add(model);
-        }, undefined, () => {
-            // fallback: простой куб как voxel бэби, если модель не загрузится
-            const geometry = new THREE.BoxGeometry(1, 1.5, 1);
-            const material = new THREE.MeshBasicMaterial({ color: 0xffd700, wireframe: true });
-            const baby = new THREE.Mesh(geometry, material);
-            scene.add(baby);
-        });
+        // Simple voxel baby made of boxes
+        const babyGroup = new THREE.Group();
 
+        // Head (beige)
+        const headGeo = new THREE.BoxGeometry(1, 1, 1);
+        const headMat = new THREE.MeshLambertMaterial({ color: 0xffd9b3 });
+        const head = new THREE.Mesh(headGeo, headMat);
+        head.position.y = 1.8;
+        babyGroup.add(head);
+
+        // Eyes (black small boxes)
+        const eyeGeo = new THREE.BoxGeometry(0.2, 0.2, 0.1);
+        const eyeMat = new THREE.MeshLambertMaterial({ color: 0x000000 });
+        const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+        leftEye.position.set(-0.3, 1.9, 0.55);
+        babyGroup.add(leftEye);
+        const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+        rightEye.position.set(0.3, 1.9, 0.55);
+        babyGroup.add(rightEye);
+
+        // Body (blue-ish for clothes)
+        const bodyGeo = new THREE.BoxGeometry(1.2, 1.5, 0.8);
+        const bodyMat = new THREE.MeshLambertMaterial({ color: 0xadd8e6 });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        body.position.y = 0.4;
+        babyGroup.add(body);
+
+        // Diaper (white)
+        const diaperGeo = new THREE.BoxGeometry(1, 0.6, 0.7);
+        const diaperMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+        const diaper = new THREE.Mesh(diaperGeo, diaperMat);
+        diaper.position.y = -0.5;
+        babyGroup.add(diaper);
+
+        // Arms (beige)
+        const armGeo = new THREE.BoxGeometry(0.3, 1, 0.3);
+        const armMat = new THREE.MeshLambertMaterial({ color: 0xffd9b3 });
+        const leftArm = new THREE.Mesh(armGeo, armMat);
+        leftArm.position.set(-0.8, 0.5, 0);
+        babyGroup.add(leftArm);
+        const rightArm = new THREE.Mesh(armGeo, armMat);
+        rightArm.position.set(0.8, 0.5, 0);
+        babyGroup.add(rightArm);
+
+        // Legs (beige)
+        const legGeo = new THREE.BoxGeometry(0.4, 1, 0.4);
+        const leftLeg = new THREE.Mesh(legGeo, armMat);
+        leftLeg.position.set(-0.4, -1.2, 0);
+        babyGroup.add(leftLeg);
+        const rightLeg = new THREE.Mesh(legGeo, armMat);
+        rightLeg.position.set(0.4, -1.2, 0);
+        babyGroup.add(rightLeg);
+
+        scene.add(babyGroup);
         camera.position.z = 5;
 
         function animate() {
             requestAnimationFrame(animate);
-            scene.rotation.y += 0.005; // медленно крутится
+            babyGroup.rotation.y += 0.005; // slow spin
             renderer.render(scene, camera);
         }
         animate();
